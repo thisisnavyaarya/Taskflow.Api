@@ -6,7 +6,7 @@ namespace Taskflow.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Taskscontroller : ControllerBase
+    public class TasksController : ControllerBase
     {
         private static readonly List<TaskItem> _tasks = new()
         {
