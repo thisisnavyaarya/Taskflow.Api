@@ -31,5 +31,33 @@ namespace Taskflow.Api.Controllers
             return CreatedAtAction(nameof(GetTasks), new { id = task.Id }, task);
                 
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(int id, TaskItem UpdateTask)
+        {
+            var task = await _context.Tasks.FindAsync(id);
+            if(task==null)
+            {
+                return NotFound();
+            }
+            task.Title = UpdateTask.Title;
+            task.Description = UpdateTask.Description;
+            task.IsCompleted = UpdateTask.IsCompleted;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            var task = await _context.Tasks.FindAsync(id);
+            if(task==null)
+            {
+                return NotFound();
+            }
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
+            return NoContent();
+                
+        }
     }
 }
