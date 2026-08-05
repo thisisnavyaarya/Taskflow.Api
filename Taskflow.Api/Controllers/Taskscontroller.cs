@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Taskflow.Api.Data;
 using Taskflow.Api.Models;
 
 namespace Taskflow.Api.Controllers
@@ -8,15 +10,26 @@ namespace Taskflow.Api.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private static readonly List<TaskItem> _tasks = new()
+        private readonly TaskFlowDbContext _context;
+        public TasksController(TaskFlowDbContext context)
         {
-            new TaskItem { Id = 1, Title = "Task 1", Description = "Description for Task 1", IsCompleted = false },
-            new TaskItem { Id = 2, Title = "Task 2", Description = "Description for Task 2", IsCompleted = true },
-        };
+            _context = context;
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<TaskItem>> GetTasks()
+       public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         {
-            return Ok(_tasks);
+            var tasks = await _context.Tasks.ToListAsync();
+            return Ok(tasks);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TaskItem>> CreateTask(TaskItem task)
+        {
+            _context.Tasks.Add(task);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetTasks), new { id = task.Id }, task);
+                
         }
     }
 }
