@@ -7,3 +7,38 @@ export async function getTasks() {
     }
     return response.json();
 }
+export async function createTask(task) {
+    const response = await fetch(`${API_BASE_URL}/tasks`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(task),
+        });
+    if (!response.ok) {
+        throw new Error("Failed to create new task");
+    }
+    return response.json();
+}
+
+export async function updateTask(id, task) {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`,
+        {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(task)
+        });
+    if (!response.ok) {
+        throw new Error("Failed to create new task");
+    }
+    return response.json();
+}
+
+export async function deleteTask(id) {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+        method: "DELETE",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to delete task");
+    }
+    // DELETE also returns 204 No Content
+}
