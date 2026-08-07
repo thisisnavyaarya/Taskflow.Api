@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTasks, createTask, updateTask, deleteTask } from "./services/taskService";
+import "./App.css";
 
 function App() {
     const [tasks, setTasks] = useState([]);
@@ -49,7 +50,7 @@ function App() {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div>
+        <div className="app-container">
             <h1>TaskFlow Live</h1>
 
             <form onSubmit={handleSubmit}>
@@ -72,16 +73,20 @@ function App() {
                 {tasks.map((task) => (
                     <li key={task.id}>
                         <span
+                            className="task-text"
                             style={{
                                 textDecoration: task.isCompleted ? "line-through" : "none",
+                                color: task.isCompleted ? "#999" : "#333",
                             }}
                         >
                             {task.title} - {task.description}
                         </span>
-                        <button onClick={() => handleToggleComplete(task)}>
+                        <button className="btn-complete" onClick={() => handleToggleComplete(task)}>
                             {task.isCompleted ? "Mark Pending" : "Mark Done"}
                         </button>
-                        <button onClick={() => handleDelete(task.id)}>Delete</button>
+                        <button className="btn-delete" onClick={() => handleDelete(task.id)}>
+                            Delete
+                        </button>
                     </li>
                 ))}
             </ul>
