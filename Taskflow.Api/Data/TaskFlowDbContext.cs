@@ -11,5 +11,6 @@ namespace Taskflow.Api.Data
 
         }
         public DbSet<TaskItem> Tasks { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
     }
 }
