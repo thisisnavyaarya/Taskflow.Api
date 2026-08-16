@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { getTasks, createTask, updateTask, deleteTask } from "./services/taskService";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./context/useAuth";
+import Login from "./components/Login";
 import "./App.css";
 
-function App() {
+function TaskList() {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const { logoutUser } = useAuth();
 
     useEffect(() => {
         loadTasks();
@@ -52,6 +56,7 @@ function App() {
     return (
         <div className="app-container">
             <h1>TaskFlow Live</h1>
+            <button onClick={logoutUser}>Logout</button>
 
             <form onSubmit={handleSubmit}>
                 <input
@@ -91,6 +96,19 @@ function App() {
                 ))}
             </ul>
         </div>
+    );
+}
+
+function AppContent() {
+    const { token } = useAuth();
+    return token ? <TaskList /> : <Login />;
+}
+
+function App() {
+    return (
+        <AuthProvider>
+            <AppContent />
+        </AuthProvider>
     );
 }
 
