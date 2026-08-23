@@ -40,11 +40,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddSwaggerGen();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "TaskFlow_";
+});
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
-
 app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
